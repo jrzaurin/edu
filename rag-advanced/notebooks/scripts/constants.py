@@ -1,1 +1,0 @@
-COHERE_API_KEY = "QEf0hLWcfZYwnswzqaTalQv2gcoBskbqVYlE9Mnt"
