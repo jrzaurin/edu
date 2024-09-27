@@ -1,6 +1,7 @@
 """
 This module contains implementations of various retriever models for document retrieval.
 """
+
 from typing import Callable
 
 import bm25s
@@ -61,9 +62,9 @@ class TFIDFRetriever(weave.Model):
         for idx in top_k_indices:
             output.append(
                 {
-                    "source": self.data.rows[idx]["metadata"]["source"],
-                    "text": self.data.rows[idx]["cleaned_content"],
-                    "score": 1 - cosine_distances[idx],
+                    "source": self.data[int(idx)]["metadata"]["source"],
+                    "text": self.data[int(idx)]["cleaned_content"],
+                    "score": 1 - cosine_distances[int(idx)],
                 }
             )
         return output

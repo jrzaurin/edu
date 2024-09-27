@@ -1,6 +1,7 @@
 """
 This module contains functions for evaluating the correctness of model responses using various metrics.
 """
+
 import difflib
 import json
 import os
@@ -18,6 +19,7 @@ from nltk.translate.bleu_score import SmoothingFunction, sentence_bleu
 from pydantic import BaseModel, field_validator
 from rouge import Rouge
 
+from .constants import COHERE_API_KEY
 from .utils import extract_json_from_markdown, make_cohere_api_call
 
 wn.ensure_loaded()
@@ -249,7 +251,7 @@ async def evaluate_correctness_using_llm_judge(
     Returns:
         Dict[str, Any]: The evaluation result containing the final score and decision.
     """
-    co_client = cohere.AsyncClientV2(api_key=os.environ["COHERE_API_KEY"])
+    co_client = cohere.AsyncClientV2(api_key=COHERE_API_KEY)
     messages = json.load(open(prompt_file))
     message_template = """<question>\n{question}\n</question><reference_answer>\n
     {reference_answer}\n</reference_answer>\n<generated_answer>\n{generated_answer}\n</generated_answer>"""

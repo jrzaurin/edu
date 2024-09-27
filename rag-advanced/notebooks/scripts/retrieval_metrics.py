@@ -1,8 +1,8 @@
 """
 This module contains operations for evaluating retrieval results using various metrics.
 """
+
 import json
-import os
 from typing import Any, Dict, List
 
 import cohere
@@ -450,7 +450,7 @@ async def evaluate_retrieval_with_llm(
     Returns:
         Dict[str, Any]: The validated response from the language model.
     """
-    co_client = cohere.AsyncClientV2(api_key=os.environ["COHERE_API_KEY"])
+    co_client = cohere.AsyncClientV2(api_key=COHERE_API_KEY)
 
     messages = json.load(open(prompt_file))
 

@@ -3,11 +3,13 @@ A module containing response generators using Cohere's API for generating respon
 """
 
 import os
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import cohere
 import weave
 from weave.integrations.cohere import cohere_patcher
+
+from .constants import COHERE_API_KEY
 
 cohere_patcher.attempt_patch()
 
@@ -33,11 +35,11 @@ class SimpleResponseGenerator(weave.Model):
         """
         super().__init__(**kwargs)
         self.client = cohere.ClientV2(
-            api_key=os.environ["COHERE_API_KEY"],
+            api_key=COHERE_API_KEY,
         )
 
     @weave.op()
-    def generate_context(self, context: List[Dict[str, any]]) -> List[Dict[str, any]]:
+    def generate_context(self, context: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
         Generate a list of contexts from the provided context list.
 
@@ -52,7 +54,7 @@ class SimpleResponseGenerator(weave.Model):
         ]
         return contexts
 
-    def create_messages(self, query: str, context: List[Dict[str, any]]):
+    def create_messages(self, query: str, context: List[Dict[str, Any]]):
         """
         Create a list of messages for the chat model based on the query and context.
 
@@ -72,7 +74,7 @@ class SimpleResponseGenerator(weave.Model):
         return messages
 
     @weave.op()
-    def generate_response(self, query: str, context: List[Dict[str, any]]) -> str:
+    def generate_response(self, query: str, context: List[Dict[str, Any]]) -> str:
         """
         Generate a response from the chat model based on the query and context.
 
@@ -93,7 +95,7 @@ class SimpleResponseGenerator(weave.Model):
         return response.message.content[0].text
 
     @weave.op()
-    def predict(self, query: str, context: List[Dict[str, any]]):
+    def predict(self, query: str, context: List[Dict[str, Any]]):
         """
         Predict the response for the given query and context.
 
@@ -130,7 +132,7 @@ class QueryEnhanedResponseGenerator(weave.Model):
         self.client = cohere.AsyncClientV2(api_key=os.environ["COHERE_API_KEY"])
 
     @weave.op()
-    def generate_context(self, context: List[Dict[str, any]]) -> List[Dict[str, any]]:
+    def generate_context(self, context: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
         Generate a list of contexts from the provided context list.
 
@@ -149,7 +151,7 @@ class QueryEnhanedResponseGenerator(weave.Model):
     def create_messages(
         self,
         query: str,
-        context: List[Dict[str, any]],
+        context: List[Dict[str, Any]],
         language: str,
         intents: List[str],
     ):
@@ -181,7 +183,7 @@ class QueryEnhanedResponseGenerator(weave.Model):
     async def generate_response(
         self,
         query: str,
-        context: List[Dict[str, any]],
+        context: List[Dict[str, Any]],
         language: str,
         intents: List[str],
     ) -> str:
@@ -199,7 +201,7 @@ class QueryEnhanedResponseGenerator(weave.Model):
         """
         messages = self.create_messages(query, context, language, intents)
         response = await self.client.chat(
-            messages=messages,
+            message=messages,
             model=self.model,
             temperature=0.1,
             max_tokens=2000,
@@ -210,7 +212,7 @@ class QueryEnhanedResponseGenerator(weave.Model):
     async def predict(
         self,
         query: str,
-        context: List[Dict[str, any]],
+        context: List[Dict[str, Any]],
         language: str,
         intents: List[str],
     ):
