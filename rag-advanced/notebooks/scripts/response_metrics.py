@@ -19,7 +19,8 @@ from nltk.translate.bleu_score import SmoothingFunction, sentence_bleu
 from pydantic import BaseModel, field_validator
 from rouge import Rouge
 
-from .constants import COHERE_API_KEY
+from .tokens_and_api_keys import COHERE_API_KEY
+
 from .utils import extract_json_from_markdown, make_cohere_api_call
 
 wn.ensure_loaded()

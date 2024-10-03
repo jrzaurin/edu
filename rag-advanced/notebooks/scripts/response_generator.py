@@ -9,7 +9,8 @@ import cohere
 import weave
 from weave.integrations.cohere import cohere_patcher
 
-from .constants import COHERE_API_KEY
+from .tokens_and_api_keys import COHERE_API_KEY
+
 
 cohere_patcher.attempt_patch()
 

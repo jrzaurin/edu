@@ -13,6 +13,7 @@ import requests
 import weave
 from rich.console import Console
 from rich.syntax import Syntax
+from .tokens_and_api_keys import COHERE_API_KEY
 
 
 def display_source(symbol):
@@ -113,7 +114,7 @@ def tokenize_text(text: str, model: str = "command-r") -> List[str]:
     Returns:
         List[str]: A list of tokens.
     """
-    co = cohere.Client(api_key=os.environ["COHERE_API_KEY"])
+    co = cohere.Client(api_key=COHERE_API_KEY)
     return co.tokenize(text=text, model=model, offline=True)
 
 

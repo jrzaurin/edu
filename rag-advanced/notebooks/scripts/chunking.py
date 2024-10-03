@@ -5,15 +5,18 @@ This module contains functions and classes for splitting text into chunks based 
 from functools import partial
 from typing import Callable, List, Optional
 
+import nltk
 import numpy as np
-from blingfire import text_to_sentences
 from sklearn.metrics.pairwise import cosine_distances
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 
 from .embedding import sync_embed
 from .utils import length_function
 
 CHUNK_SIZE = 512
+
+# so many problems with blingfire
+# from blingfire import text_to_sentences
 
 
 def sentence_splitter(text: str) -> List[str]:
@@ -26,7 +29,8 @@ def sentence_splitter(text: str) -> List[str]:
     Returns:
         List[str]: A list of sentences.
     """
-    return text_to_sentences(text).split("\n")
+    return nltk.sent_tokenize(text)
+    # return text_to_sentences(text).split("\n")
 
 
 def split_into_chunks(

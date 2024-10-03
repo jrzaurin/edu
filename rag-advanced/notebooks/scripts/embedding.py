@@ -10,6 +10,8 @@ from typing import List, Optional, Union
 import cohere
 from dotenv import load_dotenv
 
+from .tokens_and_api_keys import COHERE_API_KEY
+
 load_dotenv()
 
 TextType = Union[str, List[str]]
@@ -33,7 +35,7 @@ class EmbeddingFunction:
         environment variable `CO_API_KEY`. batch_size (int): The number of texts to process in a single batch.
         Default is 50. model (str): The model to use for embedding. Default is "embed-english-v3.0".
         """
-        self.api_key = api_key if api_key is not None else os.getenv("CO_API_KEY")
+        self.api_key = api_key if api_key is not None else COHERE_API_KEY
         self.client = cohere.AsyncClient(api_key=self.api_key)
         self.batch_size = batch_size
         self.embedding_model = model
