@@ -2,7 +2,6 @@
 This module contains the QueryEnhancer class for enhancing user queries using the Cohere API.
 """
 import json
-import os
 from enum import Enum
 from typing import Any, Dict, List
 
@@ -12,6 +11,7 @@ from ftlangdetect import detect as detect_language
 from pydantic import BaseModel
 
 from .utils import extract_json_from_markdown, make_cohere_api_call
+from .tokens_and_api_keys import COHERE_API_KEY
 
 
 @weave.op()
@@ -141,7 +141,7 @@ class QueryEnhancer(weave.Model):
         Returns:
             List[str]: A list of generated search queries.
         """
-        co_client = cohere.AsyncClientV2(api_key=os.getenv("COHERE_API_KEY"))
+        co_client = cohere.AsyncClientV2(api_key=COHERE_API_KEY)
         # load system prompt
         messages = json.load(open("prompts/search_query.json", "r"))
         # add user prompt (question)
@@ -172,7 +172,7 @@ class QueryEnhancer(weave.Model):
         Returns:
             List[Dict[str, Any]]: A list of dictionaries containing the intent predictions.
         """
-        co_client = cohere.AsyncClientV2(api_key=os.environ["COHERE_API_KEY"])
+        co_client = cohere.AsyncClientV2(api_key=COHERE_API_KEY)
         messages = json.load(open(prompt_file))
         messages.append(
             {"role": "user", "content": f"<question>\n{question}\n</question>\n"}

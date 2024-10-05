@@ -88,8 +88,8 @@ class SimpleResponseGenerator(weave.Model):
         """
         messages = self.create_messages(query, context)
         response = self.client.chat(
-            messages=messages,
             model=self.model,
+            messages=messages,
             temperature=0.1,
             max_tokens=2000,
         )
@@ -130,7 +130,8 @@ class QueryEnhanedResponseGenerator(weave.Model):
         Sets up the asynchronous Cohere client using the API key from environment variables.
         """
         super().__init__(**kwargs)
-        self.client = cohere.AsyncClientV2(api_key=os.environ["COHERE_API_KEY"])
+        self.client = cohere.AsyncClientV2(api_key=COHERE_API_KEY)
+        # self.client = cohere.AsyncClientV2(api_key=os.environ["COHERE_API_KEY"])
 
     @weave.op()
     def generate_context(self, context: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -201,13 +202,16 @@ class QueryEnhanedResponseGenerator(weave.Model):
             str: The generated response from the chat model.
         """
         messages = self.create_messages(query, context, language, intents)
-        response = await self.client.chat(
-            message=messages,
+        # The amoung of typing errors in this code is pretty amazing
+        # co_client = cohere.AsyncClientV2(api_key=COHERE_API_KEY)
+        # response = await co_client.chat(
+        response = await self.client.chat(  # type: ignore[call-arg]
+            messages=messages,
             model=self.model,
             temperature=0.1,
             max_tokens=2000,
         )
-        return response.message.content[0].text
+        return response.message.content[0].text  # type: ignore[attr-defined]
 
     @weave.op()
     async def predict(
